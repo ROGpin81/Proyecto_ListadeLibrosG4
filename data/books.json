@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "titulo": "Cien años de soledad",
+    "autor": "Gabriel García Márquez",
+    "genero": "Realismo mágico",
+    "anioPublicacion": 1967
+  },
+  {
+    "id": 2,
+    "titulo": "El señor de los anillos",
+    "autor": "J. R. R. Tolkien",
+    "genero": "Fantasía",
+    "anioPublicacion": 1954
+  },
+  {
+    "id": 3,
+    "titulo": "Clean Code",
+    "autor": "Robert C. Martin",
+    "genero": "Tecnología",
+    "anioPublicacion": 2008
+  }
+]
