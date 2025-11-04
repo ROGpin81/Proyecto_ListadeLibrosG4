@@ -100,10 +100,7 @@ app.post('/api/books', (req, res) => {
   libros.push(nuevoLibro);
   escribirLibros(libros);
 
-  res.status(201).json({
-    message: 'Libro agregado correctamente',
-    data: nuevoLibro
-  });
+  res.status(201).json({ message: 'Libro agregado correctamente', data: nuevoLibro });
 });
 
 app.put('/api/books/:id', (req, res) => {
@@ -141,6 +138,33 @@ app.put('/api/books/:id', (req, res) => {
   }
 
   return res.status(200).json(libroActualizado);
+});
+
+app.delete('/api/books/:id', (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id) || id <= 0) {
+    return res.status(400).json({ error: 'El id debe ser un número entero positivo.' });
+  }
+
+  const libros = leerLibros();
+  const idx = libros.findIndex(b => b.id === id);
+  if (idx === -1) {
+    return res.status(404).json({ error: `No existe libro con id ${id}.` });
+  }
+
+  const [libroEliminado] = libros.splice(idx, 1);
+
+  try {
+    escribirLibros(libros);
+  } catch (err) {
+    console.error('Error al escribir books.json:', err.message);
+    return res.status(500).json({ error: 'No se pudo guardar la base de datos.' });
+  }
+
+  return res.status(200).json({
+    message: `Libro con id ${id} eliminado correctamente.`,
+    data: libroEliminado
+  });
 });
 
 app.get('/', (req, res) => {
