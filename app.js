@@ -11,7 +11,7 @@ const DB_PATH = path.join(__dirname, 'data', 'books.json');
 
 function leerLibros() {
   try {
-    const data = fs.readFileSync(DB_PATH, 'utf-8');   // usa utf-8 y fallback a []
+    const data = fs.readFileSync(DB_PATH, 'utf-8');
     return JSON.parse(data || '[]');
   } catch (err) {
     console.error('Error leyendo books.json:', err.message);
@@ -47,6 +47,22 @@ function validarLibroPut(payload) {
 app.get('/api/books', (req, res) => {
   const libros = leerLibros();
   res.status(200).json(libros);
+});
+
+app.get('/api/books/:id', (req, res) => {
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id) || id <= 0) {
+    return res.status(400).json({ error: 'El id debe ser un entero positivo.' });
+  }
+
+  const libros = leerLibros();
+  const libro = libros.find(b => b.id === id);
+
+  if (!libro) {
+    return res.status(404).json({ error: `No existe libro con id ${id}.` });
+  }
+
+  return res.status(200).json(libro);
 });
 
 app.post('/api/books', (req, res) => {
